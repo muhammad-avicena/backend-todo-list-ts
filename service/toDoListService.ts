@@ -1,6 +1,5 @@
 import StandardError from "../constants/standardError";
 import { ToDoListInterface } from "../types";
-import { format } from "date-fns";
 
 class ToDoListService {
   private toDoListDao: ToDoListInterface;
