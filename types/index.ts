@@ -35,5 +35,6 @@ export interface AuthDaoInterface {
 
 export interface UserDaoInterface {
   findAllUsers(): Promise<any>;
-  updateRole(id: string, role: string): Promise<any>;
+  findUserById(id: string): Promise<any>;
+  findProfileUser(token: string): Promise<any>;
 }
