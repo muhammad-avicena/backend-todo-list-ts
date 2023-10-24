@@ -6,13 +6,17 @@ import {
   updateRole,
   updateTeam,
 } from "../controller/userController";
+import {
+  managerAuthorization,
+  adminAuthorization,
+} from "../middleware/authMiddleware";
 
 const router = Router();
 
-router.get("/", getAllUser);
-router.get("/:id", getUserById);
 router.get("/token/profile", getProfileUser);
-router.patch("/role/:id", updateRole);
-router.patch("/team/:id", updateTeam);
+router.get("/", adminAuthorization, getAllUser);
+router.get("/:id", adminAuthorization, getUserById);
+router.patch("/role/:id", managerAuthorization, updateRole);
+router.patch("/team/:id", adminAuthorization, updateTeam);
 
 export default router;
