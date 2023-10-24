@@ -48,8 +48,38 @@ class UserDao {
       });
     }
     const accessTokenPayload = verify(token, JWT_SIGN) as JwtPayload;
-    console.log(accessTokenPayload)
+    console.log(accessTokenPayload);
     const user = await this.findUserById(accessTokenPayload.id);
+    return user;
+  }
+
+  async updateRole(id: string, role: string) {
+    const objectId = new ObjectId(id);
+    const user = await this.db
+      .collection("users")
+      .updateOne({ _id: objectId }, { $set: { role } });
+    if (!user) {
+      throw new StandardError({
+        success: false,
+        message: "User not found",
+        status: 404,
+      });
+    }
+    return user;
+  }
+
+  async updateTeam(id: string, team: string) {
+    const objectId = new ObjectId(id);
+    const user = await this.db
+      .collection("users")
+      .updateOne({ _id: objectId }, { $set: { team } });
+    if (!user) {
+      throw new StandardError({
+        success: false,
+        message: "User not found",
+        status: 404,
+      });
+    }
     return user;
   }
 }
