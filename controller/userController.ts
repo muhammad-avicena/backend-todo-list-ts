@@ -41,11 +41,12 @@ async function getUserById(req: Request, res: Response, next: NextFunction) {
 
 async function getProfileUser(req: Request, res: Response, next: NextFunction) {
   const { db } = req;
-  const { token } = req.body;
+  const { username } = req.user;
+
   try {
     const userDao = new UserDao(db);
     const userService = new UserService(userDao);
-    const result = await userService.getProfileUser(token);
+    const result = await userService.getProfileUser(username);
     if (result.success) {
       return res.status(200).json({
         success: true,

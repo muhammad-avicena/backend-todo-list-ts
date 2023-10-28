@@ -39,17 +39,14 @@ class UserDao {
     return user;
   }
 
-  async findProfileUser(token: string) {
-    if (!JWT_SIGN) {
-      throw new StandardError({
-        success: false,
-        message: "JWT_SIGN is not defined",
-        status: 500,
-      });
-    }
-    const accessTokenPayload = verify(token, JWT_SIGN) as JwtPayload;
-    console.log(accessTokenPayload);
-    const user = await this.findUserById(accessTokenPayload.id);
+  async findProfileUser(username: string) {
+    const projection = {
+      password: 0,
+    };
+
+    const user = await this.db
+      .collection("users")
+      .findOne({ username }, { projection });
     return user;
   }
 

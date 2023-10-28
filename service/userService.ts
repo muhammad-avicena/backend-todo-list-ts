@@ -50,9 +50,9 @@ class UserService {
     }
   }
 
-  async getProfileUser(token: string) {
+  async getProfileUser(username: string) {
     try {
-      const user = await this.UserDao.findProfileUser(token);
+      const user = await this.UserDao.findProfileUser(username);
       if (!user) {
         throw new StandardError({
           success: false,

@@ -26,8 +26,8 @@ const userAuthentication = (
       if (!JWT_SIGN) {
         throw new Error("JWT_SIGN is not defined");
       }
-      const decodedToken = jwt.verify(token, JWT_SIGN);
-      console.log("Verified user:", decodedToken);
+      const decodedToken = jwt.verify(token, JWT_SIGN) as JwtPayload;
+      req.user = decodedToken;
       next();
     } catch (error) {
       next(error);
@@ -53,6 +53,7 @@ const authorizationMiddleware =
           throw new Error("JWT_SIGN is not defined");
         }
         const decodedToken = jwt.verify(token, JWT_SIGN) as JwtInterface;
+        req.user = decodedToken;
         if (allowedRoles.includes(decodedToken.role)) {
           next();
         } else {

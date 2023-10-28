@@ -22,14 +22,17 @@ async function getAllToDoList(req: Request, res: Response, next: NextFunction) {
 
 async function createToDoList(req: Request, res: Response, next: NextFunction) {
   const { db } = req;
-  const { activity, username, priority } = req.body;
+  const { activity, priority, dueDate } = req.body;
+  const token = req.user;
+
   try {
     const toDoListDao = new ToDoListDao(db);
     const toDoListService = new ToDoListService(toDoListDao);
     const result = await toDoListService.createToDoList(
       activity,
-      username,
-      priority
+      token.username,
+      priority,
+      dueDate
     );
     if (result.success) {
       return res.status(200).json({
@@ -60,7 +63,7 @@ async function updateToDoList(req: Request, res: Response, next: NextFunction) {
     if (result.success) {
       return res.status(200).json({
         success: true,
-        message: "Successfully create a to do list",
+        message: "Successfully updated a to do list",
         data: { totalModified: result.message },
       });
     }

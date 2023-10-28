@@ -2,6 +2,7 @@ import { Collection, Db, ObjectId } from "mongodb";
 import StandardError from "../constants/standardError";
 import { ToDolistData } from "../types";
 import { format } from "date-fns";
+import { JWT_SIGN } from "../middleware/config/jwtConfig.js";
 
 interface Database {
   collection: (name: string) => Collection;
@@ -26,19 +27,35 @@ class ToDoListDao {
     return toDoList;
   }
 
-  async createToDoList(activity: string, username: string, priority: string) {
+  async createToDoList(
+    activity: string,
+    username: string,
+    priority: string,
+    dueDate: string
+  ) {
     const defaultStatus = "Not Started";
     const newDate = new Date();
     const createdDate = format(newDate, "yyyy-MM-dd");
     newDate.setDate(newDate.getDate() + 3);
     const defaultDueDate = format(newDate, "yyyy-MM-dd");
 
+    if (!dueDate || dueDate === "") {
+      dueDate = defaultDueDate;
+    }
+
+    if (!JWT_SIGN) {
+      throw new StandardError({
+        success: false,
+        message: "JWT_SIGN is not defined",
+        status: 500,
+      });
+    }
     const newToDoList: ToDolistData = {
       activity,
       username,
       priority,
+      dueDate,
       status: defaultStatus,
-      dueDate: defaultDueDate,
       createdDate,
     };
 
@@ -81,11 +98,6 @@ class ToDoListDao {
     }
     if (dueDate) {
       toDoListData.dueDate = dueDate;
-    } else {
-      const newDate = new Date();
-      newDate.setDate(newDate.getDate() + 3);
-      const defaultDueDate = format(newDate, "yyyy-MM-dd");
-      toDoListData.dueDate = defaultDueDate;
     }
     const toDoList = await this.db.collection("toDoList").updateOne(
       { _id: objectId },

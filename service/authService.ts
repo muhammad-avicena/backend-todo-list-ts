@@ -46,7 +46,7 @@ class AuthService {
         const accessToken = sign(
           { username: user.username, id: user._id, role: user.role },
           JWT_SIGN,
-          { expiresIn: "10m" }
+          { expiresIn: "1d" }
         );
         const refreshTokenPayload: JwtPayload = {
           username: user.username,

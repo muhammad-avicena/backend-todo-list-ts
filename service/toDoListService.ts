@@ -35,7 +35,12 @@ class ToDoListService {
     }
   }
 
-  async createToDoList(activity: string, username: string, priority: string) {
+  async createToDoList(
+    activity: string,
+    username: string,
+    priority: string,
+    dueDate?: string
+  ) {
     if (!activity || !username || !priority) {
       throw new StandardError({
         success: false,
@@ -57,7 +62,8 @@ class ToDoListService {
       const toDoList = await this.toDoListDao.createToDoList(
         activity,
         username,
-        priority
+        priority,
+        dueDate
       );
       if (!toDoList) {
         throw new StandardError({

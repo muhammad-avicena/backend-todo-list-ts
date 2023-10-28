@@ -2,8 +2,9 @@ export interface ToDoListInterface {
   findAllToDoList(): Promise<any>;
   createToDoList(
     activity: string,
-    username: string,
-    priority: string
+    token: string,
+    priority: string,
+    dueDate?: string
   ): Promise<any>;
   updateToDoList(
     id: string,
@@ -36,7 +37,7 @@ export interface AuthDaoInterface {
 export interface UserDaoInterface {
   findAllUsers(): Promise<any>;
   findUserById(id: string): Promise<any>;
-  findProfileUser(token: string): Promise<any>;
+  findProfileUser(username: string): Promise<any>;
   updateRole(id: string, role: string): Promise<any>;
   updateTeam(id: string, team: string): Promise<any>;
 }
